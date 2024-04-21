@@ -4,9 +4,9 @@ resource "aws_instance" "iac_1_instance" {
   subnet_id              = aws_subnet.ec2_1_public_subnet.id
   vpc_security_group_ids = [aws_security_group.iac-instance-sg.id]
   key_name               = var.key_name
-  user_data              = file("install_script.sh")
+  #user_data              = file("install_script.sh")
   tags = {
-    Name = "Iac instance 1"
+    Name = "AS-instance-1"
   }
   depends_on = [
     aws_db_instance.rds_wordpress,
@@ -22,17 +22,15 @@ resource "aws_instance" "iac_2_instance" {
   key_name               = var.key_name
   user_data              = file("scriptminikube.sh")
   tags = {
-    Name = "Iac instance 2"
+    Name = "AS-instance-2"
   }
-  depends_on = [
-    aws_db_instance.rds_wordpress,
-  ]
 }
 
 resource "aws_db_subnet_group" "database_subnet" {
   name       = "db subnet"
   subnet_ids = [aws_subnet.database_private_subnet.id]
 }
+
 resource "aws_db_instance" "rds_wordpress" {
   identifier              = "rds-wordpress"
   allocated_storage       = 10
@@ -50,6 +48,6 @@ resource "aws_db_instance" "rds_wordpress" {
   vpc_security_group_ids  = [aws_security_group.iac-sg-database.id]
   storage_encrypted       = true
   tags = {
-    Name = "my-rds-master"
+    Name = "AS-db-instance"
   }
 }
